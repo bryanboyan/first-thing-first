@@ -29,7 +29,6 @@ View.Quadrant = React.createClass({
 	renderQuadrantTasks: function(quadrantID) {
 		var tasks = this.getQuadrantTasks(quadrantID);
 		var ret = tasks.map(function(t) {
-			console.log(t);
 			return <View.QuadrantTask task={t} />;
 		});
 		return ret;
