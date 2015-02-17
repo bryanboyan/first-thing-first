@@ -5,9 +5,12 @@ describe("Dispatcher", function() {
     // add a helper function
     if (!Dispatcher.getEventHandlerCallbackNums) {
     	Dispatcher.getEventHandlerCallbackNums = function(event) {
-    		if (!this._funcs[event]) return 0;
-    		return Object.keys(this._funcs[event]).length;
-    	}
+    		if (!this._funcsByEvent[event]) return 0;
+    		return Object.keys(this._funcsByEvent[event]).length;
+    	};
+    	Dispatcher.isHandlerRegistered = function(id) {
+    		return ('string' === typeof this._eventsByID[id]);
+    	};
     }
   });
 	it("can register events", function() {
@@ -15,6 +18,7 @@ describe("Dispatcher", function() {
 			result = numA;
 		});
 		expect(Dispatcher.getEventHandlerCallbackNums('my_event')).toEqual(1);
+		expect(Dispatcher.isHandlerRegistered(handlerID)).toBe(true);
 	});
 	it('can dispatch events', function() {
 		var numA = 10;
@@ -22,8 +26,8 @@ describe("Dispatcher", function() {
 		expect(result).toEqual(numA);
 	});
 	it('can unregister events', function() {
-		var res = Dispatcher.unregister('my_event', handlerID);
-		expect(res).toBe(true);
+		Dispatcher.unregister(handlerID);
+		expect(Dispatcher.isHandlerRegistered(handlerID)).toBe(false);
 		expect(Dispatcher.getEventHandlerCallbackNums('my_event')).toEqual(0);
 	});
 });

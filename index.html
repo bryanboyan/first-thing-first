@@ -1,3 +1,13 @@
+<script src="modules/react/react.js"></script>
+<script src="modules/react/JSXTransformer.js"></script>
+<script src="js/Const.js"></script>
+<script src="js/Dispatcher.js"></script>
+<script src="js/Task.js"></script>
+<script src="js/Storage.js"></script>
+<script src="js/TaskStore.js"></script>
+<script type="text/jsx" src="js/TaskReact.jsx"></script>
+<script type="text/jsx" src="js/QuadrantReact.jsx"></script>
+
 <style type="text/css">
 table, tr, td {
 	border: 1px solid black;
@@ -15,59 +25,22 @@ textarea {
 <h2>
 Task planning tool.
 </h2>
+<div id="started">
+</div>
 <blockquote><i>Make this the very first version just to make the ball rolling</i></blockquote>
 
-<table border="1">
-	<tr>
-		<td>
-			<textarea>
-				Manage
-				Crises & Presssing Problems
+<div id="quadrant">
+</div>
 
-				Demand + Necessity
-				Daily fire-fighting
-				Be quick to delegate
+<script type="text/jsx">
+	console.log('before react');
+	React.render(
+		<span>Using <b>React</b>!!</span>,
+		document.getElementById('started')
+	);
 
-				Important and Urgent
-			</textarea>
-		</td>
-		<td>
-			<textarea>
-				FOCUS
-				On Strategies & Values
-
-				Opportunity + Planning
-				Keep Critical thinking
-				Consider the macro
-
-				Important not urgent
-			</textarea>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<textarea>
-				Avoid
-				Interruptions & Busy work
-
-				Illusion + Deception
-				Not Your emergency
-				Minimize investment
-
-				Urgent not important
-			</textarea>
-		</td>
-		<td>
-			<textarea>
-				Limit
-				The trivial & wasteful
-
-				Escape + waste
-				Entertainment only
-				Use to Minimize stress
-
-				Not Important or urgent
-			</textarea>
-		</td>
-	</tr>
-</table>
+	React.render(
+		<QuadrantReact />,
+		document.getElementById('quadrant')
+	);
+</script>

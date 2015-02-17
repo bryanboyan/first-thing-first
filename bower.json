@@ -1,0 +1,27 @@
+{
+  "name": "task-planner",
+  "version": "0.0.0",
+  "homepage": "https://github.com/bryanboyan/first-thing-first",
+  "authors": [
+    "Boyan Lin <edwinboyan@gmail.com>"
+  ],
+  "description": "The four divension task planner",
+  "main": "index.html",
+  "keywords": [
+    "task",
+    "plan"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "modules",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react": "~0.12.2"
+  }
+}
