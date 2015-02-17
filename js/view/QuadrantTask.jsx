@@ -1,7 +1,9 @@
-(function(exports) {
+var View = View || {};
+
+(function() {
 'use strict';
 
-exports.TaskReact = React.createClass({
+View.QuadrantTask = React.createClass({
 	render: function() {
 		return (
 			<button draggable="true">
@@ -11,4 +13,4 @@ exports.TaskReact = React.createClass({
 	}
 });
 
-})(this);
+})();

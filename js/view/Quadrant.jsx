@@ -1,7 +1,9 @@
-(function(exports) {
+var View = View || {};
+
+(function() {
 'use strict';
 
-exports.QuadrantReact = React.createClass({
+View.Quadrant = React.createClass({
 	render: function() {
 		return (
 			<table border="1">
@@ -28,7 +30,7 @@ exports.QuadrantReact = React.createClass({
 		var tasks = this.getQuadrantTasks(quadrantID);
 		var ret = tasks.map(function(t) {
 			console.log(t);
-			return <TaskReact task={t} />;
+			return <View.QuadrantTask task={t} />;
 		});
 		return ret;
 	},
@@ -92,4 +94,4 @@ exports.QuadrantReact = React.createClass({
 		}
 	},
 });
-})(this);
+})();

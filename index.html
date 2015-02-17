@@ -5,8 +5,8 @@
 <script src="js/Task.js"></script>
 <script src="js/Storage.js"></script>
 <script src="js/TaskStore.js"></script>
-<script type="text/jsx" src="js/TaskReact.jsx"></script>
-<script type="text/jsx" src="js/QuadrantReact.jsx"></script>
+<script type="text/jsx" src="js/view/QuadrantTask.jsx"></script>
+<script type="text/jsx" src="js/view/Quadrant.jsx"></script>
 
 <style type="text/css">
 table, tr, td {
@@ -40,7 +40,7 @@ Task planning tool.
 	);
 
 	React.render(
-		<QuadrantReact />,
+		<View.Quadrant />,
 		document.getElementById('quadrant')
 	);
 </script>
