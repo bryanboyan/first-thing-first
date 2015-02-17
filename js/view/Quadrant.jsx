@@ -24,6 +24,8 @@ View.Quadrant = React.createClass({
 		);
 	},
 	handlerDragStart: function(e) {
+		// reset dragOver area
+		currentOverQuadrant = null;
 		e.dataTransfer.effectAllowed = 'move';
 
     // Firefox requires calling dataTransfer.setData
