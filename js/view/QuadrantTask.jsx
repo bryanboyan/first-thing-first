@@ -6,7 +6,7 @@ var View = View || {};
 View.QuadrantTask = React.createClass({
 	render: function() {
 		return (
-			<button draggable="true">
+			<button draggable="true" onDragStart={this.props.dragStartCB}>
 				{this.props.task.title}
 			</button>
 		);

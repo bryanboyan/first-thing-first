@@ -3,33 +3,69 @@ var View = View || {};
 (function() {
 'use strict';
 
+// mark the current drag over quadrant, prevent the dragOver logic to be called multiple times.
+var currentOverQuadrant = null;
+
 View.Quadrant = React.createClass({
+	name: "View.Quadrant",
+	className: "View.Quadrant",
 	render: function() {
 		return (
 			<table border="1">
 				<tr>
-					<td>
-						{this.renderQuadrantTasks(Const.QUADRANT.FOUR)}
-					</td>
-					<td>
-						{this.renderQuadrantTasks(Const.QUADRANT.ONE)}
-					</td>
+					{this.renderQuadrant(Const.QUADRANT.FOUR)}
+					{this.renderQuadrant(Const.QUADRANT.ONE)}
 				</tr>
 				<tr>
-					<td>
-						{this.renderQuadrantTasks(Const.QUADRANT.TWO)}
-					</td>
-					<td>
-						{this.renderQuadrantTasks(Const.QUADRANT.THREE)}
-					</td>
+					{this.renderQuadrant(Const.QUADRANT.TWO)}
+					{this.renderQuadrant(Const.QUADRANT.THREE)}
 				</tr>
 			</table>
 		);
 	},
+	handlerDragStart: function(e) {
+		e.dataTransfer.effectAllowed = 'move';
+
+    // Firefox requires calling dataTransfer.setData
+    // for the drag to properly work
+    e.dataTransfer.setData("text/html", e.currentTarget);
+	},
+	handlerDragOver: function(e) {
+		if (e.preventDefault) {
+	    e.preventDefault();
+	  }
+	  var overArea = e.target;
+	  if (overArea.className === this.className) {
+	  	var overQuadrantID = Number(overArea.getAttribute('data-id'));
+	  	if (this.currentOverQuadrant !== overQuadrantID) {
+	  		this.currentOverQuadrant = overQuadrantID;
+	  		// handle drag over
+	  		console.log('handling button draging over id:', overQuadrantID);
+	  	}
+	  }
+	},
+	handlerDragEnd: function(e) {
+		console.log(e.target);
+	},
+	renderQuadrant: function(quadrantID) {
+		var quadrant =
+			<td 
+				onDragOver={this.handlerDragOver} 
+				onDragEnd={this.handlerDragEnd}
+				data-id={quadrantID} 
+				className={this.className}>
+				{this.renderQuadrantTasks(quadrantID)}
+			</td>;
+		return quadrant;
+	},
 	renderQuadrantTasks: function(quadrantID) {
 		var tasks = this.getQuadrantTasks(quadrantID);
+		var self = this;
 		var ret = tasks.map(function(t) {
-			return <View.QuadrantTask task={t} />;
+			return <View.QuadrantTask 
+				task={t}
+				dragStartCB={self.handlerDragStart}
+			/>;
 		});
 		return ret;
 	},
