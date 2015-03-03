@@ -4,27 +4,36 @@
 (function(exports) {
 'use strict';
 
-function TaskStore(taskList) {
+function TaskStore(taskByID) {
 	// listen to actions that dispatched from other
 	// update
 	
-	this._taskList = taskList || [];
+	this._taskByID = taskByID || {};
+	var taskList = [];
+	for (var id in this._taskByID) {
+		taskList.push(this._taskByID[id]);
+	}
+	this._taskList = taskList;
 	
 	this.handlerIDs = []; 
-	this.handlerIDs.push(Dispatcher.register(Const.Events.TASK_CREATE, function() {
-
+	this.handlerIDs.push(Dispatcher.register(Const.Events.TASK_CREATE, function(action) {
 	}));
-	this.handlerIDs.push(Dispatcher.register(Const.Events.TASK_UPDATE
-	));
+	this.handlerIDs.push(Dispatcher.register(Const.Events.TASK_UPDATE_QUADRANT, function(action) {
+		console.log('get task update quadrant event dispached');
+		this.updateTaskQuadrant(action.taskID, action.quadrant);
+	}));
+
+	Subscriber.registerPublisher(this, 'TaskStore');
 }
 TaskStore.initTaskStore = function(){
 	// based on user data, initialize task store
 	var tasks = Storage.getAllTasks();
-	var taskList = [];
+	var taskByID = {};
 	tasks.forEach(function(task) {
-		taskList.push(new Task(task));
+		var taskObj = new Task(task);
+		taskByID[task.id] = taskObj;
 	});
-	return new TaskStore(taskList);
+	return new TaskStore(taskByID);
 }
 TaskStore.prototype.getTaskByID = function(id) {
 };
@@ -33,8 +42,11 @@ TaskStore.prototype.getTasksByQuadrant = function(quadrant) {
 		return (t.quadrant == quadrant);
 	});
 };
-TaskStore.prototype.updateTaskByID = function(id, updateObj) {
-
+TaskStore.prototype.updateTaskQuadrant = function(id, quadrant) {
+	var t = this._taskByID[id];
+	if (t) {
+		t.updateTask({quadrant: quadrant});
+	}
 };
 TaskStore.prototype.removeListener = function() {
 	this.handlerIDs.forEach(function(id) {

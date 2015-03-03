@@ -15,6 +15,11 @@ function Task(obj) {
 Task.prototype.getQuadrant = function() {
 	return this._obj.quadrant;
 }
+Task.prototype.updateTask = function(updateObj) {
+	for (var key in updateObj) {
+		this._obj[key] = updateObj[key];
+	}
+}
 Task.prototype.updateQuadrant = function(quadrant) {
 	this._obj.quadrant = quadrant;
 }
@@ -23,4 +28,4 @@ Task.prototype.getTitle = function() {
 }
 
 exports.Task = Task;
-})(window)
+})(window);

@@ -9,6 +9,9 @@ var currentOverQuadrant = null;
 View.Quadrant = React.createClass({
 	name: "View.Quadrant",
 	className: "View.Quadrant",
+	getInitialState: function() {
+		return this.getState();
+	},
 	render: function() {
 		return (
 			<table border="1">
@@ -30,6 +33,7 @@ View.Quadrant = React.createClass({
 
     // Firefox requires calling dataTransfer.setData
     // for the drag to properly work
+    e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData("text/html", e.currentTarget);
 	},
 	handlerDragOver: function(e) {
@@ -47,7 +51,13 @@ View.Quadrant = React.createClass({
 	  }
 	},
 	handlerDragEnd: function(e) {
-		console.log(e.target);
+		if (e.stopPropagation) {
+	    e.stopPropagation(); // Stops some browsers from redirecting.
+	  }
+	  var taskID = e.target.dataset.taskid;
+	  taskID = Number(taskID);
+	  Actions.dragTaskInQuadrant(taskID, this.currentOverQuadrant);
+	  this.currentOverQuadrant = null;
 	},
 	renderQuadrant: function(quadrantID) {
 		var quadrant =
@@ -61,7 +71,7 @@ View.Quadrant = React.createClass({
 		return quadrant;
 	},
 	renderQuadrantTasks: function(quadrantID) {
-		var tasks = this.getQuadrantTasks(quadrantID);
+		var tasks = this.state.tasksByQuadrant[quadrantID];
 		var self = this;
 		var ret = tasks.map(function(t) {
 			return <View.QuadrantTask 
@@ -70,6 +80,15 @@ View.Quadrant = React.createClass({
 			/>;
 		});
 		return ret;
+	},
+	getState: function() {
+		var tasksByQuadrant = {};
+		for (var key in Const.QUADRANT) {
+			tasksByQuadrant[Const.QUADRANT[key]] = this.getQuadrantTasks(Const.QUADRANT[key]);
+		}
+		return {
+			tasksByQuadrant: tasksByQuadrant
+		};
 	},
 	getQuadrantTasks: function(quadrantID) {
 		return TaskStore.getTasksByQuadrant(quadrantID);
@@ -130,5 +149,12 @@ View.Quadrant = React.createClass({
 				);
 		}
 	},
+	_onChange: function() {
+		this.setState(this.getState());
+	},
 });
+
+Subscriber.setupSubscription(View.Quadrant, [
+	'TaskStore'
+]);
 })();
